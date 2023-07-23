@@ -1,8 +1,9 @@
 import socket
 import threading
 from queue import Queue
+import os
 
-target = "localhost"
+target = "162.215.219.136"
 queue = Queue()
 open_ports = []
 threads = []
@@ -49,5 +50,13 @@ print(f"open ports = {open_ports}")
 print(f"total of {len(open_ports)} ports are open")
 
 
+
+def task_killer(port_list):
+    for x in port_list:
+        cmd = f"netstat -ano | findstr :{x}"
+        cmd_2 = f"for /f \"tokens=5\" %a in ('netstat -aon ^| findstr {x}') do @echo %~nxa"
+        cmd_3 = f"taskkill /pid {os.system(cmd_2)} /f"
+        os.system(cmd)
+        os.system(cmd_3)
 
 
